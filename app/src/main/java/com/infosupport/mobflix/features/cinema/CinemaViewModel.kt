@@ -1,6 +1,5 @@
 package com.infosupport.mobflix.features.cinema
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.infosupport.mobflix.data.MovieRepository
@@ -20,14 +19,14 @@ class CinemaViewModel @Inject constructor(private val movieRepository: MovieRepo
 
     private val movies: ArrayList<Movie> = ArrayList()
 
-    var screenState: LiveData<ScreenState> = MutableLiveData()
+    var viewState: MutableLiveData<ViewState> = MutableLiveData()
 
     init {
         loadMovies()
     }
 
     private fun loadMovies(page: Int = 1) {
-        (screenState as MutableLiveData).value = ScreenState.Loading
+        viewState.value = ViewState.Loading
         disposables.add(movieRepository.getMoviesNowInCinema(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -36,7 +35,7 @@ class CinemaViewModel @Inject constructor(private val movieRepository: MovieRepo
                             addMoviesToList(searchResult)
                         },
                         onError = {
-                            (screenState as MutableLiveData).value = ScreenState.Error
+                            viewState.value = ViewState.Error
                         }
                 )
         )
@@ -45,7 +44,7 @@ class CinemaViewModel @Inject constructor(private val movieRepository: MovieRepo
     private fun addMoviesToList(searchResult: SearchResult) {
         moviePager = MoviePager(searchResult)
         movies.addAll(searchResult.results)
-        (screenState as MutableLiveData).value = ScreenState.Data(movies)
+        viewState.value = ViewState.Data(movies)
     }
 
     fun onLoadMore() {

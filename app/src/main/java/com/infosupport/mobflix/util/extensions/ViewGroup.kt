@@ -1,4 +1,4 @@
-package com.infosupport.mobflix.extensions
+package com.infosupport.mobflix.util.extensions
 
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater

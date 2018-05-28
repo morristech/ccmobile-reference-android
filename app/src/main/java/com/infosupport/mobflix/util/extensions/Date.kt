@@ -1,4 +1,4 @@
-package com.infosupport.mobflix.extensions
+package com.infosupport.mobflix.util.extensions
 
 import java.text.DateFormat
 import java.util.*

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.infosupport.mobflix.R
 import com.infosupport.mobflix.data.model.Movie
-import com.infosupport.mobflix.extensions.asVisibility
 import com.infosupport.mobflix.util.EndlessRecyclerViewScrollListener
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.cinema_fragment.*
@@ -62,16 +61,16 @@ class CinemaFragment @Inject constructor() : DaggerFragment() {
     }
 
     private fun observeStateChanges() {
-        viewModel.screenState.observe(this, Observer { screenState ->
+        viewModel.viewState.observe(this, Observer { screenState ->
             updateView(screenState)
         })
     }
 
-    private fun updateView(screenState: ScreenState?) {
-        when(screenState) {
-            is ScreenState.Error -> showError()
-            is ScreenState.Loading -> showLoading()
-            is ScreenState.Data -> showData(screenState.movies)
+    private fun updateView(viewState: ViewState?) {
+        when (viewState) {
+            is ViewState.Error -> showError()
+            is ViewState.Loading -> showLoading()
+            is ViewState.Data -> showData(viewState.movies)
         }
     }
 
@@ -79,17 +78,17 @@ class CinemaFragment @Inject constructor() : DaggerFragment() {
         adapter.setItems(movies)
         pullToRefreshIndicator.isRefreshing = false
         errorMessage.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
     }
 
     private fun showLoading() {
         pullToRefreshIndicator.isRefreshing = true
         errorMessage.visibility = View.GONE
-
     }
 
     private fun showError() {
+        recyclerView.visibility = View.INVISIBLE
         errorMessage.visibility = View.VISIBLE
         pullToRefreshIndicator.isRefreshing = false
-
     }
 }

@@ -5,5 +5,6 @@
     <string name="cinema_movie_poster_description">Poster of %s</string>
     <string name="cinema_list_title">Now in theatres</string>
     <string name="cinema_list_more_info_button">More info</string>
+    <string name="cinema_error_message">Oops! Something went wrong…\nPull to try again.</string>
 
 </resources>

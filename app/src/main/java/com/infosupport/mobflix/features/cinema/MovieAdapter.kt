@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import com.infosupport.mobflix.BuildConfig
 import com.infosupport.mobflix.R
 import com.infosupport.mobflix.data.model.Movie
-import com.infosupport.mobflix.extensions.inflate
-import com.infosupport.mobflix.extensions.toLocalizedString
+import com.infosupport.mobflix.util.extensions.inflate
+import com.infosupport.mobflix.util.extensions.toLocalizedString
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.cinema_item_row.view.*
 import java.text.DateFormat
@@ -39,7 +39,7 @@ class MovieAdapter(private var movies: List<Movie>) : RecyclerView.Adapter<Movie
 
         fun bindMovie(movie: Movie) {
             this.movie = movie
-            Picasso.get()
+            Picasso.with(view.context)
                     .load(BuildConfig.IMAGES_BASE_URL + movie.posterPath)
                     .placeholder(R.drawable.placeholder)
                     .centerCrop()
