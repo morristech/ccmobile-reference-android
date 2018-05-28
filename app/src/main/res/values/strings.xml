@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MobFlix</string>
+
+    <!-- Feature: Cinema -->
+    <string name="cinema_movie_poster_description">Poster of %s</string>
+    <string name="cinema_list_title">Now in theatres</string>
+    <string name="cinema_list_more_info_button">More info</string>
+
 </resources>
