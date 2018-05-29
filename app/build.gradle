@@ -64,6 +64,10 @@ dependencies {
 
     // Test dependencies
     testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockitoKotlinVersion"
+    testImplementation "org.assertj:assertj-core:$assertJVersion"
+    testImplementation "android.arch.core:core-testing:$architectureComponentsVersion"
     androidTestImplementation "com.android.support.test:runner:$testRunnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
 }

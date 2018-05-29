@@ -6,30 +6,28 @@ import com.infosupport.mobflix.data.MovieRepository
 import com.infosupport.mobflix.data.model.Movie
 import com.infosupport.mobflix.data.model.SearchResult
 import com.infosupport.mobflix.util.MoviePager
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+import javax.inject.Named
 
-class CinemaViewModel @Inject constructor(private val movieRepository: MovieRepository) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
-    private var moviePager: MoviePager = MoviePager(null)
-
-    private val movies: ArrayList<Movie> = ArrayList()
+class CinemaViewModel
+@Inject constructor(private val movieRepository: MovieRepository,
+                    @Named("processingScheduler") private val processingScheduler: Scheduler,
+                    @Named("androidScheduler") private val androidScheduler: Scheduler) : ViewModel() {
 
     var viewState: MutableLiveData<ViewState> = MutableLiveData()
 
-    init {
-        loadMovies()
-    }
+    private val disposables = CompositeDisposable()
+    private var moviePager: MoviePager = MoviePager(null)
+    private val movies: ArrayList<Movie> = ArrayList()
 
-    private fun loadMovies(page: Int = 1) {
+    fun loadMovies(page: Int = 1) {
         viewState.value = ViewState.Loading
         disposables.add(movieRepository.getMoviesNowInCinema(page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(processingScheduler)
+                .observeOn(androidScheduler)
                 .subscribeBy(
                         onNext = { searchResult ->
                             addMoviesToList(searchResult)
