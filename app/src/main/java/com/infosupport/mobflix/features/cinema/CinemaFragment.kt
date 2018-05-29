@@ -37,7 +37,6 @@ class CinemaFragment @Inject constructor() : DaggerFragment() {
         setupEndlessScroll()
         setupPullToRefresh()
         observeStateChanges()
-        viewModel.loadMovies()
     }
 
     private fun setupRecyclerView() {

@@ -7,6 +7,6 @@ import retrofit2.http.Query
 
 interface TheMovieDbApi {
 
-    @GET("discover/movie?primary_release_date.gte=2018-05-01&primary_release_date.lte=2018-05-22")
+    @GET("discover/movie?primary_release_date.gte=2018-05-01&primary_release_date.lte=2018-05-30")
     fun getMoviesInCinema(@Query("page") page: Int): Flowable<SearchResult>
 }

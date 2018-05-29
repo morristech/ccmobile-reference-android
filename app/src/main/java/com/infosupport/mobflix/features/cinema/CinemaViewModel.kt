@@ -23,7 +23,11 @@ class CinemaViewModel
     private var moviePager: MoviePager = MoviePager(null)
     private val movies: ArrayList<Movie> = ArrayList()
 
-    fun loadMovies(page: Int = 1) {
+    init {
+        loadMovies()
+    }
+
+    private fun loadMovies(page: Int = 1) {
         viewState.value = ViewState.Loading
         disposables.add(movieRepository.getMoviesNowInCinema(page)
                 .subscribeOn(processingScheduler)

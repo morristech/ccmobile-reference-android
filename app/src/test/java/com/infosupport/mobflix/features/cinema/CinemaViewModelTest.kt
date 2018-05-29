@@ -4,10 +4,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.infosupport.mobflix.data.MovieRepository
 import com.infosupport.mobflix.data.model.Movie
 import com.infosupport.mobflix.data.model.SearchResult
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Flowable
 import io.reactivex.schedulers.TestScheduler
 import org.assertj.core.api.Assertions.assertThat
@@ -29,14 +26,14 @@ class CinemaViewModelTest {
 
     private val testScheduler = TestScheduler()
 
-    private val systemUnderTest: CinemaViewModel = CinemaViewModel(repositoryMock, testScheduler, testScheduler)
+    private lateinit var systemUnderTest: CinemaViewModel
 
     @Test
     fun whenLoadMoviesThenMoviesAreRetrieved() {
         whenever(repositoryMock.getMoviesNowInCinema(anyInt()))
                 .thenReturn(Flowable.just(moviesInCinema()))
 
-        systemUnderTest.loadMovies()
+        systemUnderTest = CinemaViewModel(repositoryMock, testScheduler, testScheduler)
         testScheduler.triggerActions()
 
         val viewState = systemUnderTest.viewState.value as ViewState.Data
@@ -59,7 +56,7 @@ class CinemaViewModelTest {
         whenever(repositoryMock.getMoviesNowInCinema(anyInt()))
                 .thenReturn(Flowable.just(moviesInCinema()))
 
-        systemUnderTest.loadMovies()
+        systemUnderTest = CinemaViewModel(repositoryMock, testScheduler, testScheduler)
         testScheduler.triggerActions()
         systemUnderTest.onLoadMore()
         testScheduler.triggerActions()
@@ -73,11 +70,13 @@ class CinemaViewModelTest {
     fun whenRefreshPulledThenFirstPageIsRetrieved() {
         whenever(repositoryMock.getMoviesNowInCinema(anyInt()))
                 .thenReturn(Flowable.just(moviesInCinema()))
+        systemUnderTest = CinemaViewModel(repositoryMock, testScheduler, testScheduler)
+        testScheduler.triggerActions()
 
         systemUnderTest.onRefreshPulled()
         testScheduler.triggerActions()
 
-        verify(repositoryMock).getMoviesNowInCinema(eq(1))
+        verify(repositoryMock, times(2)).getMoviesNowInCinema(eq(1))
         val viewState = systemUnderTest.viewState.value as ViewState.Data
         assertThat(viewState.movies.size).isEqualTo(2)
     }
@@ -87,7 +86,7 @@ class CinemaViewModelTest {
         whenever(repositoryMock.getMoviesNowInCinema(anyInt()))
                 .thenReturn(Flowable.error(IOException()))
 
-        systemUnderTest.loadMovies()
+        systemUnderTest = CinemaViewModel(repositoryMock, testScheduler, testScheduler)
         testScheduler.triggerActions()
 
         assertThat(systemUnderTest.viewState.value).isInstanceOf(ViewState.Error::class.java)
